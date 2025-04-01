@@ -6,14 +6,13 @@ public class SimpleTower : Tower
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected override void Awake()
     {
-        cost = 20;
-        rotateSpeed = 0.7f;
-        radius = 3.5f;
-        damage = 34;
-        attackSpeed = 4;
+        cost = 30;
+        rotateSpeed = 0.8f;
+        radius = 3f;
+        damage = 49;
+        attackSpeed = 2.5f;
         maxLevel = 10;
 
-        buy();
         base.Awake();
     }
 
@@ -25,30 +24,32 @@ public class SimpleTower : Tower
 
     public override void buy()
     {
-        cost += cost / 5;
+        spentMoney += cost;
+        cost += cost / 2;
     }
 
     public override void upgrade()
     {
         if (level < maxLevel)
         {
-            cost += cost / 5;
+            spentMoney += cost;
+            cost += cost / 2;
             rotateSpeed += rotateSpeed / 10;
-            radius += radius / 10;
+            radius += radius / 15;
             damage += damage / 10;
             attackSpeed += attackSpeed / 10;
             level++;
         }
     }
 
-    public override Dictionary<string, float> getStats()
+    public override Dictionary<string, string> getStats()
     {
-        Dictionary<string, float> dict = new Dictionary<string, float>
+        Dictionary<string, string> dict = new Dictionary<string, string>
         {
-            { "Damage", damage },
-            { "Radius", radius },
-            { "AttackSpeed", attackSpeed },
-            { "RotateSpeed", rotateSpeed }
+            { "Damage", damage.ToString("F1") },
+            { "Radius", radius.ToString("F1") },
+            { "Attack speed", attackSpeed.ToString("F1") },
+            { "Rotate speed", rotateSpeed.ToString("F1") }
         };
 
         return dict;

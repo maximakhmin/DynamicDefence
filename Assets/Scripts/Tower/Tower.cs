@@ -14,20 +14,19 @@ public abstract class Tower : MonoBehaviour
     protected float attackSpeed;
     private float attackDelta = 0f;
     protected int cost;
-    private int targetMode = 1;
+    protected int spentMoney = 0;
+    private int targetMode = 0;
     protected int level = 1;
     protected int maxLevel = 10;
 
     protected GameObject target;
 
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected virtual void Awake()
     {
-        fire.SetActive(false);
+
     }
 
-    // Update is called once per frame
     protected virtual void Update()
     {
         target = findEmeny();
@@ -119,30 +118,7 @@ public abstract class Tower : MonoBehaviour
 
         }
     }
-
-    public void setTargetMode(int t)
-    {
-        targetMode = t;
-    }
-
-    public float getRadius()
-    {
-        return radius;
-    }
-    public int getCost()
-    {
-        return cost;
-    }
-    public string getLevel()
-    {
-        return level + "/" + maxLevel + " lvl";
-    }
-    public bool isMax()
-    {
-        return level == maxLevel;
-    }
-
-    bool isInRadius(Vector3 v)
+    protected bool isInRadius(Vector3 v)
     {
         return (Mathf.Pow((v.x - transform.position.x), 2) + Mathf.Pow((v.y - transform.position.y), 2)) <= radius * radius;
     }
@@ -193,19 +169,45 @@ public abstract class Tower : MonoBehaviour
     protected virtual void attack()
     {
         target.GetComponent<Enemy>().minusHealth(damage);
-        fire.SetActive(true);
-        Invoke("offFire", 0.1f);
+        playFire();
     }
-    protected void offFire()
+    protected void playFire()
     {
-        fire.SetActive(false);
+        fire.GetComponent<Animator>().Play("Explosion2", 0, 0f);
+    }
+
+    public void setTargetMode(int t)
+    {
+        targetMode = t;
+    }
+    public int getTargetMode()
+    {
+        return targetMode;
+    }
+    public int getSellCost()
+    {
+        return spentMoney / 2;
+    }
+    public float getRadius()
+    {
+        return radius;
+    }
+    public int getCost()
+    {
+        return cost;
+    }
+    public string getLevel()
+    {
+        return level + "/" + maxLevel + " lvl";
+    }
+    public bool isMax()
+    {
+        return level == maxLevel;
     }
 
     public abstract void upgrade();
     public abstract void buy();
-
-    public abstract Dictionary<string, float> getStats();
-
+    public abstract Dictionary<string, string> getStats();
     public abstract string getTowerName();
 }
 

@@ -1,28 +1,18 @@
 using System.Collections;
-using System.Drawing;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class EnemyHpBar : MonoBehaviour
 {
+
     public GameObject HpBar;
+    public GameObject freezeMark;
+    public GameObject poisonMark;
     private float HpBarScale;
 
-    public float speed = 100;
-    public int power = 1;
-    public int award = 1;
-
-    private float health = 100;
-    private float maxHealth = 100;
-    private float timeHpBar = 3f;
+    private float timeHpBar = 2f;
     private float deltaHpBar = 0f;
 
-    private LineRenderer line;
-    private int posInd = 0;
-    private float epsX=0, epsY=0;
-    private float liveTime = 0f;
-
     private Coroutine coroutineOffHpBar;
-    private Base mainBase;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -30,42 +20,14 @@ public class Enemy : MonoBehaviour
     {
         HpBarScale = HpBar.transform.localScale.x;
         HpBar.transform.parent.gameObject.SetActive(false);
-
-        mainBase = GameObject.Find("Base").GetComponent<Base>();
-
-
-        line = GameObject.Find("MainPath").GetComponent<LineRenderer>();
-        epsX = Random.Range(-0.2f, 0.2f);
-        epsY = Random.Range(-0.2f, 0.2f);
-        transform.position = line.GetPosition(posInd) + new Vector3(epsX, epsY, -2);
-        posInd++;
-
+        offFreezeMark(); 
+        offPoisonMark();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //-------move---------
-        Vector3 pos = line.GetPosition(posInd) + new Vector3(epsX, epsY, 0);
-        float distance = Mathf.Pow( Mathf.Pow(pos.x - transform.position.x, 2) + Mathf.Pow(pos.y - transform.position.y, 2), 0.5f);
-        while (distance < 0.01f)
-        {
-            posInd++;
-            if (posInd == line.positionCount)
-                Destroy(gameObject);
-            pos = line.GetPosition(posInd) + new Vector3(epsX, epsY, 0);
-            distance = Mathf.Pow(Mathf.Pow((pos.x - transform.position.x), 2) + Mathf.Pow((pos.y - transform.position.y), 2), 1 / 2);
-        }
-
-        float moveX = (pos.x - transform.position.x) / distance;
-        float moveY = (pos.y - transform.position.y) / distance;        
-
-        transform.Translate(new Vector3(moveX, moveY, 0) * speed * Time.deltaTime);
-
-        liveTime += Time.deltaTime;
-
-        //------------hp----------
-        if (deltaHpBar > timeHpBar && coroutineOffHpBar==null)
+        if (deltaHpBar > timeHpBar && coroutineOffHpBar == null)
         {
             coroutineOffHpBar = StartCoroutine(offHpBar(0.5f));
         }
@@ -77,29 +39,10 @@ public class Enemy : MonoBehaviour
         {
             deltaHpBar = 0;
         }
-
     }
 
-    public float getLiveTime()
+    public void minusHealth(float damage, float health, float maxHealth)
     {
-        return liveTime;
-    }
-
-    public float getHealth()
-    {
-        return health;
-    }
-
-    public void minusHealth(float damage)
-    {
-        health -= damage;
-        if (health < 0)
-        {
-            mainBase.addMoney(award);
-            Destroy(gameObject);
-            return;
-        }
-
         if (coroutineOffHpBar != null)
         {
             StopCoroutine(coroutineOffHpBar);
@@ -110,9 +53,9 @@ public class Enemy : MonoBehaviour
 
         UnityEngine.Color color = HpBar.GetComponent<SpriteRenderer>().color;
         UnityEngine.Color colorTargetv = new UnityEngine.Color(0.7f, 0, 0);
-        color.r += (colorTargetv.r - color.r) * damage / (health+damage);
-        color.g += (colorTargetv.b - color.g) * damage / (health+damage);
-        color.b += (colorTargetv.b - color.b) * damage / (health+damage);
+        color.r += (colorTargetv.r - color.r) * damage / (health + damage);
+        color.g += (colorTargetv.b - color.g) * damage / (health + damage);
+        color.b += (colorTargetv.b - color.b) * damage / (health + damage);
         HpBar.GetComponent<SpriteRenderer>().color = color;
 
         HpBar.transform.localScale = new Vector3(health / maxHealth * HpBarScale, HpBar.transform.localScale.y, HpBar.transform.localScale.z);
@@ -120,6 +63,39 @@ public class Enemy : MonoBehaviour
                                                     Quaternion.identity);
 
         deltaHpBar = 0f;
+    }
+    public void onFreezeMark()
+    {
+        if (coroutineOffHpBar != null)
+        {
+            StopCoroutine(coroutineOffHpBar);
+            coroutineOffHpBar = null;
+        }
+        setOpacity(1f);
+        HpBar.transform.parent.gameObject.SetActive(true);
+        deltaHpBar = 0f;
+        freezeMark.SetActive(true);
+    }
+    public void offFreezeMark()
+    {
+        freezeMark.SetActive(false);
+    }
+
+    public void onPoisonMark()
+    {
+        if (coroutineOffHpBar != null)
+        {
+            StopCoroutine(coroutineOffHpBar);
+            coroutineOffHpBar = null;
+        }
+        setOpacity(1f);
+        HpBar.transform.parent.gameObject.SetActive(true);
+        deltaHpBar = 0f;
+        poisonMark.SetActive(true);
+    }
+    public void offPoisonMark()
+    {
+        poisonMark.SetActive(false);
     }
 
     IEnumerator offHpBar(float t)
@@ -133,7 +109,7 @@ public class Enemy : MonoBehaviour
         }
         HpBar.transform.parent.gameObject.SetActive(false);
         setOpacity(1f);
-    } 
+    }
 
     void setOpacity(float opacity)
     {

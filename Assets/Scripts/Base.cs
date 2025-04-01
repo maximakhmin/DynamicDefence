@@ -6,9 +6,11 @@ public class Base : MonoBehaviour
 
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI moneyText;
+    public TextMeshProUGUI waveText;
+    public TextMeshProUGUI waveUnderText;
 
     private int health = 20;
-    private int money = 50;
+    private int money = 80;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -29,7 +31,9 @@ public class Base : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            health -= collision.gameObject.GetComponent<Enemy>().power;
+            Enemy e = collision.gameObject.GetComponent<Enemy>();
+            health -= e.getPower();
+            GameObject.Find("EnemySpawn").GetComponent<EnemySpawn>().offAward(e.getWaveNum());
             Destroy(collision.gameObject);
             updateHealthText();
         }
@@ -37,12 +41,20 @@ public class Base : MonoBehaviour
 
     private void updateHealthText()
     {
-        healthText.text = "" + health;
+        healthText.text = "HP " + health;
     }
 
     private void updateMoneyText()
     {
-        moneyText.text = "" + money;
+        moneyText.text = "Coins " + money;
+    }
+    public void updateWaveText(string text)
+    {
+        waveText.text = "" + text;
+    }
+    public void updateWaveUnderText(string text)
+    {
+        waveUnderText.text = "" + text;
     }
 
     public int getMoney()

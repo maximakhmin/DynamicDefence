@@ -5,19 +5,19 @@ public class SplashTower : Tower
 {
 
     private float splashRadius;
+    public GameObject explosion;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected override void Awake()
     {
         cost = 50;
         rotateSpeed = 0.6f;
-        radius = 2.5f;
+        radius = 2f;
         splashRadius = 0.5f;
-        damage = 70;
-        attackSpeed = 1;
+        damage = 55;
+        attackSpeed = 0.7f;
         maxLevel = 10;
 
-        buy();
         base.Awake();
     }
 
@@ -29,32 +29,34 @@ public class SplashTower : Tower
 
     public override void buy()
     {
-        cost += cost / 5;
+        spentMoney += cost;
+        cost += (int)(cost * 0.4f);
     }
 
     public override void upgrade()
     {
         if (level < maxLevel)
         {
-            cost += cost / 5;
+            spentMoney += cost;
+            cost += (int)(cost * 0.4f);
             rotateSpeed += rotateSpeed / 10;
-            radius += radius / 10;
+            radius += radius * 0.07f;
             damage += damage / 10;
             attackSpeed += attackSpeed / 10;
-            splashRadius += splashRadius / 5;
+            splashRadius += splashRadius / 15;
             level++;
         }
     }
 
-    public override Dictionary<string, float> getStats()
+    public override Dictionary<string, string> getStats()
     {
-        Dictionary<string, float> dict = new Dictionary<string, float>
+        Dictionary<string, string> dict = new Dictionary<string, string>
         {
-            { "Damage", damage },
-            { "Radius", radius },
-            { "AttackSpeed", attackSpeed },
-            { "RotateSpeed", rotateSpeed },
-            { "SplashRadius", splashRadius },
+            { "Damage", damage.ToString("F1") },
+            { "Radius", radius.ToString("F1") },
+            { "Attack speed", attackSpeed.ToString("F1") },
+            { "Rotate speed", rotateSpeed.ToString("F1") },
+            { "Splash radius", splashRadius.ToString("F1") },
         };
 
         return dict;
@@ -67,6 +69,8 @@ public class SplashTower : Tower
 
     protected override void attack()
     {
+        playFire();
+
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (GameObject enemy in enemies)
         {
@@ -75,8 +79,10 @@ public class SplashTower : Tower
                 enemy.GetComponent<Enemy>().minusHealth(damage);
             }
         }
-        fire.SetActive(true);
-        Invoke("offFire", 0.1f);
+
+        GameObject gm = Instantiate(explosion, target.transform.position, Quaternion.identity);
+        gm.transform.localScale *= splashRadius;
+
     }
 
     bool checkSplashRadius(Vector3 v)
