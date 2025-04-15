@@ -118,7 +118,7 @@ public abstract class Tower : MonoBehaviour
 
         }
     }
-    protected bool isInRadius(Vector3 v)
+    public bool isInRadius(Vector3 v)
     {
         return (Mathf.Pow((v.x - transform.position.x), 2) + Mathf.Pow((v.y - transform.position.y), 2)) <= radius * radius;
     }
@@ -196,9 +196,13 @@ public abstract class Tower : MonoBehaviour
     {
         return cost;
     }
-    public string getLevel()
+    public string getLevelStr()
     {
         return level + "/" + maxLevel + " lvl";
+    }
+    public int getLevel()
+    {
+        return level;
     }
     public bool isMax()
     {
@@ -209,6 +213,7 @@ public abstract class Tower : MonoBehaviour
     public abstract void buy();
     public abstract Dictionary<string, string> getStats();
     public abstract string getTowerName();
+    public abstract int getTowerNum();
 }
 
 

@@ -1,0 +1,4 @@
+MLPlayer13 --- всегда ставит обычные башни
+[INFO] Copied results\MLPlayer13\My Behavior\My Behavior-150762.onnx to results\MLPlayer13\My Behavior.onnx.
+
+MLPlayer16 --- использует микс башен 

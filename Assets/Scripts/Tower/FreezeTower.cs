@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using UnityEditor.Timeline;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class FreezeTower : Tower
 {
@@ -59,6 +57,11 @@ public class FreezeTower : Tower
     public override string getTowerName()
     {
         return "Freeze Tower";
+    }
+
+    public override int getTowerNum()
+    {
+        return 3;
     }
 
     protected override void attack()

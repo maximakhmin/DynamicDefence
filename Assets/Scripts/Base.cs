@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Base : MonoBehaviour
 {
@@ -33,7 +34,14 @@ public class Base : MonoBehaviour
         {
             Enemy e = collision.gameObject.GetComponent<Enemy>();
             health -= e.getPower();
+
+            if (health <= 0)
+            {
+                endLevel(false);
+            }
+
             GameObject.Find("EnemySpawn").GetComponent<EnemySpawn>().offAward(e.getWaveNum());
+            GameObject.Find("MLDDA").GetComponent<MLDDA>().addLastHitPosition(transform.position);
             Destroy(collision.gameObject);
             updateHealthText();
         }
@@ -62,10 +70,23 @@ public class Base : MonoBehaviour
         return money;
     }
 
+    public int getHealth()
+    {
+        return health;
+    }
+
     public void addMoney(int m)
     {
         money += m;
         updateMoneyText();
+    }
+
+    public void endLevel(bool b)
+    {
+        GameObject.Find("MLPlayer").GetComponent<MLPlayer>().endEpisodeVoid(b);
+        GameObject.Find("MLDDA").GetComponent<MLDDA>().endEpisodeVoid();
+        int a = Random.Range(0, 3);
+        SceneManager.LoadScene(a);
     }
 
 }

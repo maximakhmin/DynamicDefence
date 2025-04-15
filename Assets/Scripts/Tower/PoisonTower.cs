@@ -12,7 +12,7 @@ public class PoisonTower : Tower
         cost = 80;
         rotateSpeed = 1.5f;
         radius = 1.5f;
-        damage = 35;
+        damage = 45;
         attackSpeed = 2;
         poisonDuration = 3f;
         maxLevel = 10;
@@ -65,6 +65,11 @@ public class PoisonTower : Tower
     public override string getTowerName()
     {
         return "Poison Tower";
+    }
+
+    public override int getTowerNum()
+    {
+        return 4;
     }
 
     protected override void attack()

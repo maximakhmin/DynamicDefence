@@ -64,7 +64,7 @@ public class TowerPanel : MonoBehaviour
         towerNameText.text = tower.getTowerName();
         upgradeText.text = tower.getCost() + " coins";
         sellText.text = tower.getSellCost() + " coins";
-        levelText.text = tower.getLevel();
+        levelText.text = tower.getLevelStr();
 
         foreach (Transform child in statsField.transform)
         {

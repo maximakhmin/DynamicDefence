@@ -1,26 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EnemySpawn : MonoBehaviour
 {
 
     public GameObject[] enemiesPrefab;
-    public int waveMax = 100;
+    private int waveMax = 50;
     private int waveNum = 0;
 
     private float deltaWave = 15f;
-    private int enemyCount = 10;
+    private int enemyCount = 8;
 
     private LineRenderer line;
     private Base mainBase;
     private float deltaCount;
 
-    private float wavePower = 1;
-    private int waveAward = 35;
+    private float wavePower = 0.80f;
+    private int waveAward = 25;
 
     private Dictionary<int, bool[]> waves = new Dictionary<int, bool[]>();
     private ArrayList enemies = new ArrayList();
+
+    private Dictionary<int, float[]> MLData = new Dictionary<int, float[]>(); // number of wave : [waveLiveTime, waveType]
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -37,8 +40,14 @@ public class EnemySpawn : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        foreach (int wn in MLData.Keys.ToList())
+        {
+            MLData[wn][0] += Time.deltaTime;
+        }
+
+
         mainBase.updateWaveUnderText("Next wave in " + (deltaWave - deltaCount).ToString("F1") + "s");
-        foreach (int wn in waves.Keys) {
+        foreach (int wn in waves.Keys.ToList()) {
             if (waves[wn][0])
             {
                 continue;
@@ -52,24 +61,35 @@ public class EnemySpawn : MonoBehaviour
                     break;
                 }
             }
-            if (b)
+            if (b) // окончание волны
             {
+                GameObject.Find("MLPlayer").GetComponent<MLPlayer>().setMLData(MLData[wn][0], (int)MLData[wn][1]);
+                GameObject.Find("MLPlayer").GetComponent<MLPlayer>().endWave(waves[wn][1]);
+                GameObject.Find("MLDDA").GetComponent<MLDDA>().setMLData(MLData[wn][0], (int)MLData[wn][1]);
+                GameObject.Find("MLDDA").GetComponent<MLDDA>().endWave(waves[wn][1]);
                 if (waves[wn][1])
                 {
                     mainBase.addMoney(waveAward);
                 }
                 waves.Remove(wn);
+                MLData.Remove(wn);
+
             }
         }
-
-        if ((deltaCount < deltaWave) && (waves.Count != 0 || waveNum==0))
+        if (waveNum >= waveMax && waves.Count == 0)
+        {
+            mainBase.endLevel(true);
+        }
+        else if ((deltaCount < deltaWave) && (waves.Count != 0 || waveNum==0))
         {
             deltaCount += Time.deltaTime;
         }
         else
         {
-            StartCoroutine(Wave());
+            waveNum++; 
             waves.Add(waveNum, new[] { true, true });
+            MLData.Add(waveNum, new[] { 0f, 0f });
+            StartCoroutine(Wave());
             deltaCount = 0f;
 
             for (int i = 0; i < enemies.Count; i++)
@@ -85,16 +105,16 @@ public class EnemySpawn : MonoBehaviour
 
     IEnumerator Wave()
     {
-        waveNum++;
-        if (waveNum % 5 == 0)
+        if (waveNum % 5 == 0 && waveNum!=0)
         {
             enemyCount++;
-            waveAward += 3;
+            waveAward += 5;
         }
 
         mainBase.updateWaveText("Wave " + waveNum + " / " + waveMax);
 
         int num = Random.Range(0, enemiesPrefab.Length);
+        MLData[waveNum][1] = num;
         float delta = 0f;
 
         int count = 0;
@@ -117,7 +137,7 @@ public class EnemySpawn : MonoBehaviour
             yield return null;
         }
         waves[waveNum][0] = false;
-        wavePower += 0.10f;
+        wavePower += 0.1f;
     }
 
     public void offAward(int WaveNumber)
@@ -130,5 +150,44 @@ public class EnemySpawn : MonoBehaviour
                 return;
             }
         }
+    }
+
+    public ArrayList getEnemies()
+    {
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            if ((GameObject)enemies[i] == null)
+            {
+                enemies.Remove(i);
+                i--;
+            }
+        }
+
+
+        return enemies;
+    }
+
+    public void setDelta(int enemyCountDelta, int waveAwardDelta, float wavePowerDelta)
+    {
+        enemyCount += enemyCountDelta;
+        waveAward += waveAwardDelta;
+        wavePower += wavePowerDelta;
+    }
+
+    public int getWaveNum()
+    {
+        return waveNum;
+    }
+    public int getEnemyCount()
+    {
+        return enemyCount;
+    }
+    public int getWaveAward()
+    {
+        return waveAward;
+    }
+    public float getWavePower()
+    {
+        return wavePower;
     }
 }

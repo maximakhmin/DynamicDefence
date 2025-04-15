@@ -9,8 +9,8 @@ public class SimpleTower : Tower
         cost = 30;
         rotateSpeed = 0.8f;
         radius = 3f;
-        damage = 49;
-        attackSpeed = 2.5f;
+        damage = 35;
+        attackSpeed = 2f;
         maxLevel = 10;
 
         base.Awake();
@@ -37,7 +37,7 @@ public class SimpleTower : Tower
             rotateSpeed += rotateSpeed / 10;
             radius += radius / 15;
             damage += damage / 10;
-            attackSpeed += attackSpeed / 10;
+            attackSpeed += attackSpeed / 20;
             level++;
         }
     }
@@ -58,6 +58,11 @@ public class SimpleTower : Tower
     public override string getTowerName()
     {
         return "Simple Tower";
+    }
+
+    public override int getTowerNum()
+    {
+        return 1;
     }
 
 }

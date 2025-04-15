@@ -14,8 +14,8 @@ public class SplashTower : Tower
         rotateSpeed = 0.6f;
         radius = 2f;
         splashRadius = 0.5f;
-        damage = 55;
-        attackSpeed = 0.7f;
+        damage = 60;
+        attackSpeed = 0.8f;
         maxLevel = 10;
 
         base.Awake();
@@ -65,6 +65,11 @@ public class SplashTower : Tower
     public override string getTowerName()
     {
         return "Splash Tower";
+    }
+
+    public override int getTowerNum()
+    {
+        return 2;
     }
 
     protected override void attack()

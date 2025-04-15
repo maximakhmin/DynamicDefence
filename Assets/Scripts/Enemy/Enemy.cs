@@ -26,6 +26,8 @@ public abstract class Enemy : MonoBehaviour
     private Coroutine freezeCoroutine;
     private Coroutine poisonCoroutine;
 
+    private Vector3 lastHitPosition;
+
     private int waveNum;
 
 
@@ -40,6 +42,7 @@ public abstract class Enemy : MonoBehaviour
         epsX = Random.Range(-0.2f, 0.2f);
         epsY = Random.Range(-0.2f, 0.2f);
         transform.position = line.GetPosition(posInd) + new Vector3(epsX, epsY, -2);
+        lastHitPosition = transform.position;
         posInd++;
     }
 
@@ -48,7 +51,7 @@ public abstract class Enemy : MonoBehaviour
     {
         Vector3 pos = line.GetPosition(posInd) + new Vector3(epsX, epsY, 0);
         float distance = Mathf.Pow( Mathf.Pow(pos.x - transform.position.x, 2) + Mathf.Pow(pos.y - transform.position.y, 2), 0.5f);
-        while (distance < 0.01f)
+        while (distance < 0.01f * baseSpeed)
         {
             posInd++;
             if (posInd == line.positionCount)
@@ -68,7 +71,6 @@ public abstract class Enemy : MonoBehaviour
         transform.Translate(new Vector3(moveX, moveY, 0) * speed * Time.deltaTime);
 
         liveTime += Time.deltaTime;
-
     }
 
     public float getLiveTime()
@@ -104,8 +106,10 @@ public abstract class Enemy : MonoBehaviour
     public void minusHealth(float damage)
     {
         health -= damage;
+        lastHitPosition = transform.position;
         if (health < 0)
         {
+            GameObject.Find("MLDDA").GetComponent<MLDDA>().addLastHitPosition(lastHitPosition);
             mainBase.addMoney(award);
             Destroy(gameObject);
             return;
@@ -151,6 +155,7 @@ public abstract class Enemy : MonoBehaviour
     IEnumerator offPoison(float damage, float duration)
     {
         float delta = 0;
+        lastHitPosition = transform.position;
         while (delta < duration)
         {
             delta += Time.deltaTime;
