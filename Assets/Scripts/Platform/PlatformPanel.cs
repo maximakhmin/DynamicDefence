@@ -14,7 +14,7 @@ public class PlatformPanel : MonoBehaviour
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         mainBase = GameObject.Find("Base").GetComponent<Base>();
 
@@ -63,11 +63,21 @@ public class PlatformPanel : MonoBehaviour
     {
         GameObject gm = Instantiate(towerPrefabs[num], activePlatform.transform);
         activePlatform.createTowerPanel(gm);
+
+        gm = GameObject.Find("Music");
+        if (gm) gm.GetComponent<SoundController>().playUpgradeSound();
     }
 
     public void closePanel()
     {
         gameObject.SetActive(false);
+    }
+    public void closePanelButton()
+    {
+        gameObject.SetActive(false);
+
+        GameObject gm = GameObject.Find("Music");
+        if (gm) gm.GetComponent<SoundController>().playButtonSound();
     }
 
 

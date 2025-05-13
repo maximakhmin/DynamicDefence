@@ -10,6 +10,12 @@ public class Base : MonoBehaviour
     public TextMeshProUGUI waveText;
     public TextMeshProUGUI waveUnderText;
 
+    public GameObject endPanel;
+    public TextMeshProUGUI endPanelNameText;
+    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI recordText;
+
+
     private int health = 20;
     private int money = 80;
 
@@ -26,7 +32,7 @@ public class Base : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //Debug.Log(Screen.width + " " + Screen.height);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -37,12 +43,14 @@ public class Base : MonoBehaviour
 
             if (health <= 0)
             {
-                endLevel(false);
+                endLevel();
             }
 
             GameObject.Find("EnemySpawn").GetComponent<EnemySpawn>().offAward(e.getWaveNum());
             GameObject.Find("MLDDA").GetComponent<MLDDA>().addLastHitPosition(transform.position);
             Destroy(collision.gameObject);
+            GameObject gm = GameObject.Find("Music");
+            if (gm) gm.GetComponent<SoundController>().playBaseDamageSound();
             updateHealthText();
         }
     }
@@ -81,12 +89,56 @@ public class Base : MonoBehaviour
         updateMoneyText();
     }
 
-    public void endLevel(bool b)
+    public void endLevel()
     {
-        GameObject.Find("MLPlayer").GetComponent<MLPlayer>().endEpisodeVoid(b);
+        //GameObject.Find("MLPlayer").GetComponent<MLPlayer>().endEpisodeVoid(b);
         GameObject.Find("MLDDA").GetComponent<MLDDA>().endEpisodeVoid();
+        //train 
+        /*
         int a = Random.Range(0, 3);
         SceneManager.LoadScene(a);
+        */
+        Time.timeScale = 0f;
+
+
+        string levelName = SceneManager.GetActiveScene().name;
+        int score = GameObject.Find("EnemySpawn").GetComponent<EnemySpawn>().getWaveNum();
+
+        endPanelNameText.text = levelName;
+        scoreText.text = "Your score: " + score;
+
+        int record = DataBaseAdapter.getLevelRecord(levelName);
+
+        if (score > record)
+        {
+            recordText.text = "That is your new record";
+            DataBaseAdapter.setLevelRecord(levelName, score);
+        }
+        else
+        {
+            recordText.text = "Record: " + record;
+        }
+
+        GameObject.FindGameObjectWithTag("Platform").GetComponent<Platform>().closePanels();
+        GameObject.Find("EnemySpawn").GetComponent<EnemySpawnPanel>().closePanel();
+
+        endPanel.SetActive(true);
+    }
+
+    public void restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        GameObject gm = GameObject.Find("Music");
+        if (gm) gm.GetComponent<SoundController>().playButtonSound();
+    }
+
+    public void menu()
+    {
+        SceneManager.LoadScene("Menu");
+
+        GameObject gm = GameObject.Find("Music");
+        if (gm) gm.GetComponent<SoundController>().playButtonSound();
     }
 
 }

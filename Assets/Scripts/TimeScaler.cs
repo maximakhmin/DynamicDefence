@@ -16,11 +16,14 @@ public class TimeScaler : MonoBehaviour
             int temp = i;
             buttons[i].onClick.AddListener(() => setTimeScale(temp));
         }
-        setTimeScale(1);
+        Time.timeScale = 1f;
     }
 
     void setTimeScale(int num)
     {
+        GameObject gm = GameObject.Find("Music");
+        if (gm) gm.GetComponent<SoundController>().playButtonSound();
+
         for (int i = 0; i < buttons.Length; i++)
         {
             if (i==num)

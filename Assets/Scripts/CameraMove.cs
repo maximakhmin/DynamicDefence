@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.Controls;
 
 public class CameraMove : MonoBehaviour
@@ -22,6 +23,12 @@ public class CameraMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+        { 
+            isPressed = false;
+            return;
+        }
+
         float mouseScroll = Input.GetAxis("Mouse ScrollWheel");
         float scrollSpeed = 3f;
         if ((mouseScroll < 0) && (cam.orthographicSize-mouseScroll*scrollSpeed < maxCamSize))

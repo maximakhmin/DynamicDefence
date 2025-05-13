@@ -63,6 +63,7 @@ public abstract class Tower : MonoBehaviour
                 }
                 return e;
             case 1: // last
+                if (!enemies[0]) return null;
                 temp = enemies[0].GetComponent<Enemy>().getLiveTime();
                 foreach (GameObject enemy in enemies)
                 {
@@ -87,6 +88,7 @@ public abstract class Tower : MonoBehaviour
                 }
                 return e;
             case 3: // lowest health
+                if (!enemies[0]) return null;
                 temp = enemies[0].GetComponent<Enemy>().getHealth();
                 foreach (GameObject enemy in enemies)
                 {

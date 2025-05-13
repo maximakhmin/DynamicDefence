@@ -2,12 +2,7 @@ using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
-using System.Collections;
-using UnityEngine.UIElements;
-using UnityEditor.ShaderKeywordFilter;
-using UnityEngine.Rendering;
 using System.Collections.Generic;
-using Unity.VisualScripting.ReorderableList;
 
 public class MLDDA : Agent
 {

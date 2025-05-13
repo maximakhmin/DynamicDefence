@@ -110,6 +110,9 @@ public abstract class Enemy : MonoBehaviour
         if (health < 0)
         {
             GameObject.Find("MLDDA").GetComponent<MLDDA>().addLastHitPosition(lastHitPosition);
+            GameObject gm = GameObject.Find("Music");
+            if (gm) gm.GetComponent<SoundController>().playEmenyDeathSound();
+
             mainBase.addMoney(award);
             Destroy(gameObject);
             return;

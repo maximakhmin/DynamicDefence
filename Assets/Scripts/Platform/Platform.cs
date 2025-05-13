@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class Platform : MonoBehaviour
@@ -18,8 +19,8 @@ public class Platform : MonoBehaviour
 
     void Start()
     {
-        closeTowerPanel();
-        closePlatformPanel();
+        //closeTowerPanel();
+        //closePlatformPanel();
     }
 
     // Update is called once per frame
@@ -28,10 +29,12 @@ public class Platform : MonoBehaviour
 
     }
 
-    void OnMouseDown()
+    void OnMouseUpAsButton()
     {
+        if (EventSystem.current.IsPointerOverGameObject()) return;
         closeTowerPanel();
         closePlatformPanel();
+        GameObject.Find("EnemySpawn").GetComponent<EnemySpawnPanel>().closePanel();
         if (towerPanel != null)
         {
             openTowerPanel();
@@ -40,11 +43,13 @@ public class Platform : MonoBehaviour
         {
             openPlatformPanel();
         }
+
+        GameObject gm = GameObject.Find("Music");
+        if (gm) gm.GetComponent<SoundController>().playButtonSound();
     }
 
     void openTowerPanel()
     {
-        closePlatformPanel();
         towerPanel.GetComponent<TowerPanel>().setPanel();
     }
     void closeTowerPanel()
@@ -70,7 +75,14 @@ public class Platform : MonoBehaviour
     {
         towerPanel = Instantiate(towerPanelPrefab, GameObject.Find("Canvas").transform);
         towerPanel.GetComponent<TowerPanel>().setTower(t.GetComponent<Tower>());
+        closePlatformPanel();
         openTowerPanel();
+    }
+
+    public void closePanels()
+    {
+        closePlatformPanel();
+        closeTowerPanel();
     }
 
     

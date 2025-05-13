@@ -7,7 +7,7 @@ public class EnemySpawn : MonoBehaviour
 {
 
     public GameObject[] enemiesPrefab;
-    private int waveMax = 50;
+    //private int waveMax = 50;
     private int waveNum = 0;
 
     private float deltaWave = 15f;
@@ -30,11 +30,11 @@ public class EnemySpawn : MonoBehaviour
     {
         line = GameObject.Find("MainPath").GetComponent<LineRenderer>();
         mainBase = GameObject.Find("Base").GetComponent<Base>();
-        mainBase.updateWaveText("Wave " + waveNum + " / " + waveMax);
+        mainBase.updateWaveText("Wave " + waveNum);
 
         transform.position = line.GetPosition(0) + new Vector3(0, 0, -5);
 
-        deltaCount = 0;
+        deltaCount = 5f;
     }
 
     // Update is called once per frame
@@ -63,8 +63,8 @@ public class EnemySpawn : MonoBehaviour
             }
             if (b) // окончание волны
             {
-                GameObject.Find("MLPlayer").GetComponent<MLPlayer>().setMLData(MLData[wn][0], (int)MLData[wn][1]);
-                GameObject.Find("MLPlayer").GetComponent<MLPlayer>().endWave(waves[wn][1]);
+                //GameObject.Find("MLPlayer").GetComponent<MLPlayer>().setMLData(MLData[wn][0], (int)MLData[wn][1]);
+                //GameObject.Find("MLPlayer").GetComponent<MLPlayer>().endWave(waves[wn][1]);
                 GameObject.Find("MLDDA").GetComponent<MLDDA>().setMLData(MLData[wn][0], (int)MLData[wn][1]);
                 GameObject.Find("MLDDA").GetComponent<MLDDA>().endWave(waves[wn][1]);
                 if (waves[wn][1])
@@ -76,11 +76,7 @@ public class EnemySpawn : MonoBehaviour
 
             }
         }
-        if (waveNum >= waveMax && waves.Count == 0)
-        {
-            mainBase.endLevel(true);
-        }
-        else if ((deltaCount < deltaWave) && (waves.Count != 0 || waveNum==0))
+        if ((deltaCount < deltaWave) && (waves.Count != 0 || waveNum==0))
         {
             deltaCount += Time.deltaTime;
         }
@@ -111,7 +107,7 @@ public class EnemySpawn : MonoBehaviour
             waveAward += 5;
         }
 
-        mainBase.updateWaveText("Wave " + waveNum + " / " + waveMax);
+        mainBase.updateWaveText("Wave " + waveNum);
 
         int num = Random.Range(0, enemiesPrefab.Length);
         MLData[waveNum][1] = num;

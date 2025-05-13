@@ -83,6 +83,10 @@ public class TowerPanel : MonoBehaviour
     {
         mainBase.addMoney(-tower.getCost());
         tower.upgrade();
+
+        GameObject gm = GameObject.Find("Music");
+        if (gm) gm.GetComponent<SoundController>().playUpgradeSound();
+
         setPanel();
     }
 
@@ -92,6 +96,9 @@ public class TowerPanel : MonoBehaviour
         closePanel();
         Destroy(tower.gameObject);
         Destroy(gameObject);
+
+        GameObject gm = GameObject.Find("Music");
+        if (gm) gm.GetComponent<SoundController>().playButtonSound();
     }
 
     public void switchMode(int mode)
@@ -104,6 +111,9 @@ public class TowerPanel : MonoBehaviour
                 switchModeButtons[i].GetComponent<Image>().color = colorOff;
         }
         tower.setTargetMode(mode);
+
+        GameObject gm = GameObject.Find("Music");
+        if (gm) gm.GetComponent<SoundController>().playButtonSound();
     }
 
     public void setTower(Tower t)
@@ -118,6 +128,15 @@ public class TowerPanel : MonoBehaviour
     {
         GameObject.Find("Radius").GetComponent<Radius>().offRadius();
         gameObject.SetActive(false);
+    }
+
+    public void closePanelButton()
+    {
+        GameObject.Find("Radius").GetComponent<Radius>().offRadius();
+        gameObject.SetActive(false);
+
+        GameObject gm = GameObject.Find("Music");
+        if (gm) gm.GetComponent<SoundController>().playButtonSound();
     }
 
 }
