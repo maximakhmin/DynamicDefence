@@ -51,7 +51,7 @@ public abstract class Enemy : MonoBehaviour
     {
         Vector3 pos = line.GetPosition(posInd) + new Vector3(epsX, epsY, 0);
         float distance = Mathf.Pow( Mathf.Pow(pos.x - transform.position.x, 2) + Mathf.Pow(pos.y - transform.position.y, 2), 0.5f);
-        while (distance < 0.01f * baseSpeed)
+        while (distance < Time.deltaTime * baseSpeed)
         {
             posInd++;
             if (posInd == line.positionCount)
@@ -109,8 +109,9 @@ public abstract class Enemy : MonoBehaviour
         lastHitPosition = transform.position;
         if (health < 0)
         {
-            GameObject.Find("MLDDA").GetComponent<MLDDA>().addLastHitPosition(lastHitPosition);
-            GameObject gm = GameObject.Find("Music");
+            GameObject gm = GameObject.Find("MLDDA");
+            if (gm) gm.GetComponent<MLDDA>().addLastHitPosition(lastHitPosition);
+            gm = GameObject.Find("Music");
             if (gm) gm.GetComponent<SoundController>().playEmenyDeathSound();
 
             mainBase.addMoney(award);

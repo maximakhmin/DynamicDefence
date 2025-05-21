@@ -15,7 +15,7 @@ public class Base : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI recordText;
 
-
+    [SerializeField]
     private int health = 20;
     private int money = 80;
 
@@ -41,15 +41,17 @@ public class Base : MonoBehaviour
             Enemy e = collision.gameObject.GetComponent<Enemy>();
             health -= e.getPower();
 
-            if (health <= 0)
+            if (health <= 0 && health >= -5)
             {
                 endLevel();
             }
 
-            GameObject.Find("EnemySpawn").GetComponent<EnemySpawn>().offAward(e.getWaveNum());
-            GameObject.Find("MLDDA").GetComponent<MLDDA>().addLastHitPosition(transform.position);
+            GameObject gm = GameObject.Find("EnemySpawn");
+            if (gm) gm.GetComponent<EnemySpawn>().offAward(e.getWaveNum());
+            gm = GameObject.Find("MLDDA");
+            if (gm) gm.GetComponent<MLDDA>().addLastHitPosition(transform.position);
             Destroy(collision.gameObject);
-            GameObject gm = GameObject.Find("Music");
+            gm = GameObject.Find("Music");
             if (gm) gm.GetComponent<SoundController>().playBaseDamageSound();
             updateHealthText();
         }
@@ -107,12 +109,12 @@ public class Base : MonoBehaviour
         endPanelNameText.text = levelName;
         scoreText.text = "Your score: " + score;
 
-        int record = DataBaseAdapter.getLevelRecord(levelName);
+        int record = SaveManager.getLevelRecord(levelName);
 
         if (score > record)
         {
             recordText.text = "That is your new record";
-            DataBaseAdapter.setLevelRecord(levelName, score);
+            SaveManager.setLevelRecord(levelName, score);
         }
         else
         {

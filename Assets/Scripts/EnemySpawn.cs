@@ -17,7 +17,7 @@ public class EnemySpawn : MonoBehaviour
     private Base mainBase;
     private float deltaCount;
 
-    private float wavePower = 0.80f;
+    private float wavePower = 0.40f;
     private int waveAward = 25;
 
     private Dictionary<int, bool[]> waves = new Dictionary<int, bool[]>();
@@ -101,10 +101,10 @@ public class EnemySpawn : MonoBehaviour
 
     IEnumerator Wave()
     {
-        if (waveNum % 5 == 0 && waveNum!=0)
+        if (waveNum % 4 == 0 && waveNum!=0)
         {
             enemyCount++;
-            waveAward += 5;
+            waveAward += 2;
         }
 
         mainBase.updateWaveText("Wave " + waveNum);
@@ -133,7 +133,7 @@ public class EnemySpawn : MonoBehaviour
             yield return null;
         }
         waves[waveNum][0] = false;
-        wavePower += 0.1f;
+        wavePower += 0.06f;
     }
 
     public void offAward(int WaveNumber)

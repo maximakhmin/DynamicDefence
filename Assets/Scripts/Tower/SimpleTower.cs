@@ -9,7 +9,7 @@ public class SimpleTower : Tower
         cost = 30;
         rotateSpeed = 0.8f;
         radius = 3f;
-        damage = 35;
+        damage = 25;
         attackSpeed = 2f;
         maxLevel = 10;
 
@@ -34,10 +34,10 @@ public class SimpleTower : Tower
         {
             spentMoney += cost;
             cost += cost / 2;
-            rotateSpeed += rotateSpeed / 10;
-            radius += radius / 15;
-            damage += damage / 10;
-            attackSpeed += attackSpeed / 20;
+            rotateSpeed += rotateSpeed * 0.1f;
+            radius += radius * 0.1f;
+            damage += damage * 0.1f;
+            attackSpeed += attackSpeed * 0.15f;
             level++;
         }
     }

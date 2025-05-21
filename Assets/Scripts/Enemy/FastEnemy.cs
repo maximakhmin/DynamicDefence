@@ -6,7 +6,7 @@ public class FastEnemy : Enemy
     protected override void Awake()
     {
         baseSpeed = 2.75f;
-        maxHealth = 35;
+        maxHealth = 33;
         power = 1;
         award = 1;
 

@@ -3,15 +3,29 @@ using UnityEngine.SceneManagement;
 
 public class StartController : MonoBehaviour
 {
+    SoundController sc;
+    float v;
+
+    private void Start()
+    {
+        SaveFileHandler.CreateNewSaveIfNotExists();
+        sc = GameObject.Find("Music").GetComponent<SoundController>();
+        float[] volumes = SaveManager.getVolume();
+        sc.changeMusicVolume(volumes[0]);
+        sc.changeSoundVolume(0.0001f);
+        v = volumes[1];
+    }
+
     public void startGame()
     {
-        DataBaseRepository.CreateNewSaveIfNotExists();
         SceneManager.LoadScene("Menu");
-
-        float[] volumes = DataBaseAdapter.getVolume();
-        SoundController sc = GameObject.Find("Music").GetComponent<SoundController>();
+        sc.changeSoundVolume(v);
         sc.playButtonSound();
-        sc.changeMusicVolume(volumes[0]);
-        sc.changeSoundVolume(volumes[1]);
     }
+
+    public void exit()
+    {
+        Application.Quit();
+    }
+        
 }

@@ -6,7 +6,7 @@ public class StrongEnemy : Enemy
     protected override void Awake()
     {
         baseSpeed = 1;
-        maxHealth = 115;
+        maxHealth = 100;
         power = 2;
         award = 1;
 

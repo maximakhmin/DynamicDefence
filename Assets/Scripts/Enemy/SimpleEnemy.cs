@@ -6,7 +6,7 @@ public class SimpleEnemy : Enemy
     protected override void Awake()
     {
         baseSpeed = 1.5f;
-        maxHealth = 60;
+        maxHealth = 66;
         power = 1;
         award = 1;
 

@@ -10,7 +10,7 @@ public class MusicController : MonoBehaviour
     private static float clipDelta = 5f;
     private float deltaTime = 0f;
 
-    private AudioSource audio;
+    private AudioSource audioSource;
     private Coroutine offVolumeCoroutine;
 
 
@@ -18,11 +18,11 @@ public class MusicController : MonoBehaviour
     {
         iter = Random.Range(0, audioClips.Length - 1);
 
-        audio = GetComponent<AudioSource>();
-        audio.loop = true;
-        audio.volume = 0f;
-        audio.resource = audioClips[iter];
-        audio.Play();
+        audioSource = GetComponent<AudioSource>();
+        audioSource.loop = true;
+        audioSource.volume = 0f;
+        audioSource.resource = audioClips[iter];
+        audioSource.Play();
         StartCoroutine(onVolume());
     }
 
@@ -38,8 +38,8 @@ public class MusicController : MonoBehaviour
             int newIter = Random.Range(0, audioClips.Length - 1);
             if (iter == newIter) newIter = Random.Range(0, audioClips.Length - 1);
             iter = newIter;
-            audio.resource = audioClips[iter];
-            audio.Play();
+            audioSource.resource = audioClips[iter];
+            audioSource.Play();
             deltaTime = 0;
             StartCoroutine(onVolume());
             offVolumeCoroutine = null;
@@ -53,21 +53,21 @@ public class MusicController : MonoBehaviour
         float delta = 0f;
         while (delta < clipDelta)
         {
-            audio.volume = 1 - delta / clipDelta;
+            audioSource.volume = 1 - delta / clipDelta;
             delta += Time.unscaledDeltaTime;
             yield return null;
         }
-        audio.volume = 0f;
+        audioSource.volume = 0f;
     }
     IEnumerator onVolume()
     {
         float delta = 0f;
         while (delta < clipDelta)
         {
-            audio.volume = delta / clipDelta;
+            audioSource.volume = delta / clipDelta;
             delta += Time.unscaledDeltaTime;
             yield return null;
         }
-        audio.volume = 1f;
+        audioSource.volume = 1f;
     }
 }

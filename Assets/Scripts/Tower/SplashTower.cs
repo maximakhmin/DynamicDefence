@@ -14,7 +14,7 @@ public class SplashTower : Tower
         rotateSpeed = 0.6f;
         radius = 2f;
         splashRadius = 0.5f;
-        damage = 60;
+        damage = 40;
         attackSpeed = 0.8f;
         maxLevel = 10;
 
@@ -41,9 +41,9 @@ public class SplashTower : Tower
             cost += (int)(cost * 0.4f);
             rotateSpeed += rotateSpeed / 10;
             radius += radius * 0.07f;
-            damage += damage / 10;
-            attackSpeed += attackSpeed / 10;
-            splashRadius += splashRadius / 15;
+            damage += damage * 0.05f;
+            attackSpeed += attackSpeed * 0.05f;
+            splashRadius += splashRadius * 0.05f;
             level++;
         }
     }

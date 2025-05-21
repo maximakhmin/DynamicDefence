@@ -20,7 +20,7 @@ public class PauseController : MonoBehaviour
         musicSlider.onValueChanged.AddListener(delegate { changeMusicVolume(); });
         soundSlider.onValueChanged.AddListener(delegate { changeSoundVolume(); });
 
-        float[] volumes = DataBaseAdapter.getVolume();
+        float[] volumes = SaveManager.getVolume();
         musicSlider.value = volumes[0];
         soundSlider.value = volumes[1];
 
@@ -74,7 +74,7 @@ public class PauseController : MonoBehaviour
         Time.timeScale = timeScale;
         isOpen = false;
 
-        DataBaseAdapter.setVolume(musicSlider.value, soundSlider.value);
+        SaveManager.setVolume(musicSlider.value, soundSlider.value);
 
         GameObject gm = GameObject.Find("Music");
         if (gm) gm.GetComponent<SoundController>().playButtonSound();

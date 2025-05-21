@@ -12,8 +12,8 @@ public class PoisonTower : Tower
         cost = 80;
         rotateSpeed = 1.5f;
         radius = 1.5f;
-        damage = 45;
-        attackSpeed = 2;
+        damage = 30; // per second
+        attackSpeed = 1.5f;
         poisonDuration = 3f;
         maxLevel = 10;
 
@@ -38,11 +38,11 @@ public class PoisonTower : Tower
         if (level < maxLevel)
         {
             spentMoney += cost;
-            cost += (int)(cost * 0.35f);
-            rotateSpeed += rotateSpeed / 10;
-            radius += radius / 20;
-            damage += damage / 10;
-            attackSpeed += attackSpeed / 20;
+            cost += (int)(cost * 0.4f);
+            rotateSpeed += rotateSpeed * 0.1f;
+            radius += radius * 0.05f;
+            damage += damage * 0.15f;
+            attackSpeed += attackSpeed * 0.1f;
             poisonDuration += 0.225f;
             level++;
         }

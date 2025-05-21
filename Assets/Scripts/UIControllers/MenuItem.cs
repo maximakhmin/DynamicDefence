@@ -11,7 +11,7 @@ public class MenuItem : MonoBehaviour
     public void setPanel(string ln, Sprite i)
     {
         levelName.text = ln;
-        int record = DataBaseAdapter.getLevelRecord(ln);
+        int record = SaveManager.getLevelRecord(ln);
         if (record == -1)
         {
             levelRecord.text = "Record: N/A";

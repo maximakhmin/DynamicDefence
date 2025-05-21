@@ -41,17 +41,17 @@ public class TowerPanel : MonoBehaviour
         if (mainBase.getMoney() >= tower.getCost() && !tower.isMax())
         {
             upgradeButton.GetComponent<Image>().color = colorOn;
-            upgradeButton.GetComponent<Button>().enabled = true;
+            upgradeButton.GetComponent<Button>().interactable = true;
         }
         else
         {
             upgradeButton.GetComponent<Image>().color = colorOff;
-            upgradeButton.GetComponent<Button>().enabled = false;
+            upgradeButton.GetComponent<Button>().interactable = false;
         }
         if (tower.isMax())
         {
             upgradeButton.GetComponent<Image>().color = colorOff;
-            upgradeButton.GetComponent<Button>().enabled = false;
+            upgradeButton.GetComponent<Button>().interactable = false;
             upgradeText.text = "Max level";
         }
     }

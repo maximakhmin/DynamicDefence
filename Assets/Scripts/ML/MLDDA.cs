@@ -69,8 +69,8 @@ public class MLDDA : Agent
         {
             int enemyCountDelta = actions.DiscreteActions[0] - 1; //3
             int waveAwardDelta = actions.DiscreteActions[1] - 5; //11
-            float wavePowerDelta = actions.ContinuousActions[0] * 0.5f;
-            enemySpawn.setDelta(enemyCountDelta, waveAwardDelta, wavePowerDelta);
+            float wavePowerDelta = actions.ContinuousActions[0] * 0.2f;
+            //enemySpawn.setDelta(enemyCountDelta, waveAwardDelta, wavePowerDelta);
             Debug.Log(enemyCountDelta + " " + waveAwardDelta + " " + wavePowerDelta +" \t\t\tReward: " + GetCumulativeReward());
             isChange = false;
         }

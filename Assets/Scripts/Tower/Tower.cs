@@ -54,7 +54,7 @@ public abstract class Tower : MonoBehaviour
                 temp = 0;
                 foreach (GameObject enemy in enemies)
                 {
-                    if ((enemy.GetComponent<Enemy>().getLiveTime() > temp) &&
+                    if ((enemy.GetComponent<Enemy>().getLiveTime() >= temp) &&
                           isInRadius(enemy.transform.position))
                     {
                         e = enemy;
@@ -63,11 +63,11 @@ public abstract class Tower : MonoBehaviour
                 }
                 return e;
             case 1: // last
-                if (!enemies[0]) return null;
+                if (enemies.Length == 0) return null;
                 temp = enemies[0].GetComponent<Enemy>().getLiveTime();
                 foreach (GameObject enemy in enemies)
                 {
-                    if ((enemy.GetComponent<Enemy>().getLiveTime() < temp) &&
+                    if ((enemy.GetComponent<Enemy>().getLiveTime() <= temp) &&
                           isInRadius(enemy.transform.position))
                     {
                         e = enemy;
@@ -79,7 +79,7 @@ public abstract class Tower : MonoBehaviour
                 temp = 0;
                 foreach (GameObject enemy in enemies)
                 {
-                    if ((enemy.GetComponent<Enemy>().getHealth() > temp) &&
+                    if ((enemy.GetComponent<Enemy>().getHealth() >= temp) &&
                           isInRadius(enemy.transform.position))
                     {
                         e = enemy;
@@ -88,11 +88,11 @@ public abstract class Tower : MonoBehaviour
                 }
                 return e;
             case 3: // lowest health
-                if (!enemies[0]) return null;
+                if (enemies.Length == 0) return null;
                 temp = enemies[0].GetComponent<Enemy>().getHealth();
                 foreach (GameObject enemy in enemies)
                 {
-                    if ((enemy.GetComponent<Enemy>().getHealth() < temp) &&
+                    if ((enemy.GetComponent<Enemy>().getHealth() <= temp) &&
                           isInRadius(enemy.transform.position))
                     {
                         e = enemy;
@@ -128,8 +128,9 @@ public abstract class Tower : MonoBehaviour
     bool rotateToTarget()
     {
         float angle = targetAngle();
-        if (Mathf.Abs(angle - tower.transform.rotation.eulerAngles.z) < 1)
+        if (Mathf.Abs(angle - tower.transform.rotation.eulerAngles.z) < rotateSpeed * 180 * Time.deltaTime)
         {
+            tower.transform.rotation = Quaternion.Euler(0, 0, angle);
             return true;
         }
         else
